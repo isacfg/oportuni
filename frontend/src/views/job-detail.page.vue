@@ -26,6 +26,12 @@
 									class="rounded-full flex items-center gap-2 cursor-pointer">
 									Reportar vaga
 								</Button>
+								<Button variant="outline" size="lg"
+									class="rounded-full flex items-center gap-2 cursor-pointer"
+									:aria-label="isFavorited ? 'Desfavoritar' : 'Favoritar'" @click="toggleFavorite">
+									<component :is="isFavorited ? Heart : HeartOff" class="w-5 h-5"
+										:class="isFavorited ? 'text-red-500' : ''" />
+								</Button>
 							</div>
 
 							<!-- Tags -->
@@ -299,12 +305,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeaderComponent from '@/components/app-header.component.vue'
 import { useJobStore } from '@/stores/job.store'
 import { Button } from '@/components/ui/button'
 import JobTagComponent from '@/components/job-tag.component.vue'
+import { Heart, HeartOff } from 'lucide-vue-next'
 
 const route = useRoute()
 const jobStore = useJobStore()
@@ -313,6 +320,9 @@ const job = computed(() => {
 	const id = route.params.id as string
 	return jobStore.getJobById(id)
 })
+
+const isFavorited = ref(false)
+const toggleFavorite = () => { isFavorited.value = !isFavorited.value }
 
 const formatDate = (date: Date): string => {
 	return date.toLocaleDateString('pt-BR', {

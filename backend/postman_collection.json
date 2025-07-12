@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "Google OAuth API - AdonisJS",
+    "description": "Collection for testing Google OAuth authentication with AdonisJS backend",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3333",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Start Google OAuth Flow",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/google/redirect",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "google", "redirect"]
+            },
+            "description": "Redirects to Google OAuth login page. Copy the redirect URL and open it in a browser to complete the OAuth flow."
+          },
+          "response": []
+        },
+        {
+          "name": "2. Google OAuth Callback (Manual Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/google/callback?code=REPLACE_WITH_ACTUAL_CODE&state=REPLACE_WITH_ACTUAL_STATE",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "google", "callback"],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "REPLACE_WITH_ACTUAL_CODE",
+                  "description": "Authorization code from Google"
+                },
+                {
+                  "key": "state",
+                  "value": "REPLACE_WITH_ACTUAL_STATE",
+                  "description": "State parameter from Google"
+                }
+              ]
+            },
+            "description": "This endpoint is called by Google after user authorization. You'll need to extract the code and state from the callback URL after completing the OAuth flow in a browser."
+          },
+          "response": []
+        },
+        {
+          "name": "3. Get Current User (Protected)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Get current authenticated user information. Requires Bearer token."
+          },
+          "response": []
+        },
+        {
+          "name": "4. Logout (Protected)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Logout the current user. Requires Bearer token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test Endpoints",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Basic health check endpoint to verify server is running."
+          },
+          "response": []
+        },
+        {
+          "name": "Test Protected Route (Should Fail)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Test protected route without authentication - should return 401."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
