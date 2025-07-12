@@ -1,0 +1,19 @@
+The current progress of the project is tracked in memory-bank/progress.md (mdc:memory-bank/progress.md). ALWAYS update this file as you progress through the project.
+do use tailwind
+High-level architecture details for the project are described in memory-bank/architecture.md (mdc:memory-bank/architecture.md).
+Always leverage the context7 mcp tool during development to fetch up-to-date documentation for any project dependencies (e.g., shadcn, Tailwind CSS, etc.). Prioritize sequential thinking mcp tool in your development process, breaking down tasks into logical, manageable steps.
+If you create a new file(s), please run the following command afterwards to update the project documentation.
+bash ./update_structure.sh
+Always read the strucutre.md file to understand the project structure and what is already implemented.
+
+Always use kebab-case for file names.
+for services: name.service.ts
+for stores: name.store.ts
+for components: name.component.tsx
+for pages: name.page.tsx
+for utils: name.util.ts
+for types: name.type.ts
+for hooks: name.hook.ts
+for constants: name.constant.ts
+for enums: name.enum.ts
+for interfaces: name.interface.ts
