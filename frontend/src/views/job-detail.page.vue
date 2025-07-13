@@ -26,12 +26,8 @@
 									class="rounded-full flex items-center gap-2 cursor-pointer">
 									Reportar vaga
 								</Button>
-								<Button variant="outline" size="lg"
-									class="rounded-full flex items-center gap-2 cursor-pointer"
-									:aria-label="isFavorited ? 'Desfavoritar' : 'Favoritar'" @click="toggleFavorite">
-									<component :is="isFavorited ? Heart : HeartOff" class="w-5 h-5"
-										:class="isFavorited ? 'text-red-500' : ''" />
-								</Button>
+								<FavoriteHeartComponent v-model="isFavorited" size="md" variant="button"
+									@favorited="onFavorited" />
 							</div>
 
 							<!-- Tags -->
@@ -311,7 +307,7 @@ import AppHeaderComponent from '@/components/app-header.component.vue'
 import { useJobStore } from '@/stores/job.store'
 import { Button } from '@/components/ui/button'
 import JobTagComponent from '@/components/job-tag.component.vue'
-import { Heart, HeartOff } from 'lucide-vue-next'
+import FavoriteHeartComponent from '@/components/favorite-heart.component.vue'
 
 const route = useRoute()
 const jobStore = useJobStore()
@@ -322,7 +318,11 @@ const job = computed(() => {
 })
 
 const isFavorited = ref(false)
-const toggleFavorite = () => { isFavorited.value = !isFavorited.value }
+
+const onFavorited = (favorited: boolean) => {
+	console.log('Job favorited:', favorited)
+	// Here you could emit to parent, call API, etc.
+}
 
 const formatDate = (date: Date): string => {
 	return date.toLocaleDateString('pt-BR', {

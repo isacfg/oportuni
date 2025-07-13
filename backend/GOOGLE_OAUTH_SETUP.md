@@ -85,8 +85,8 @@ localStorage.setItem('authToken', response.token.value)
 fetch('/auth/me', {
   headers: {
     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 })
 ```
 
@@ -95,6 +95,7 @@ fetch('/auth/me', {
 Possible error responses:
 
 1. **Access Denied** (400):
+
    ```json
    {
      "error": "Access denied",
@@ -103,6 +104,7 @@ Possible error responses:
    ```
 
 2. **State Mismatch** (400):
+
    ```json
    {
      "error": "State mismatch",
@@ -111,6 +113,7 @@ Possible error responses:
    ```
 
 3. **Email Not Verified** (400):
+
    ```json
    {
      "error": "Email not verified",
@@ -135,10 +138,9 @@ Tokens expire after 30 days. Handle token expiration in your frontend:
 ```javascript
 fetch('/auth/me', {
   headers: {
-    'Authorization': `Bearer ${token}`,
-  }
-})
-.then(response => {
+    Authorization: `Bearer ${token}`,
+  },
+}).then((response) => {
   if (response.status === 401) {
     // Token expired, redirect to login
     window.location.href = '/auth/google/redirect'
@@ -155,10 +157,9 @@ To logout, call the logout endpoint and remove the token from storage:
 fetch('/auth/logout', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${token}`,
-  }
-})
-.then(() => {
+    Authorization: `Bearer ${token}`,
+  },
+}).then(() => {
   localStorage.removeItem('authToken')
   // Redirect to login page
 })
@@ -211,6 +212,7 @@ You can test the OAuth flow by:
 ## API Testing Examples
 
 ### Test Authentication
+
 ```bash
 # Get user info
 curl -H "Authorization: Bearer oat_1234567890abcdef..." \
@@ -240,4 +242,4 @@ Enable debug logging in your `.env`:
 LOG_LEVEL=debug
 ```
 
-This will provide detailed OAuth flow information in your logs. 
+This will provide detailed OAuth flow information in your logs.

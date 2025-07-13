@@ -1,11 +1,7 @@
 <template>
 	<RouterLink :to="{ name: 'job-detail', params: { id: job.id } }"
 		class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow block relative">
-		<Button variant="outline" size="icon" class="absolute top-4 right-4 z-10"
-			:aria-label="isFavorited ? 'Desfavoritar' : 'Favoritar'" @click.stop.prevent="toggleFavorite">
-			<component :is="isFavorited ? Heart : HeartOff" class="w-5 h-5"
-				:class="isFavorited ? 'text-red-500' : ''" />
-		</Button>
+
 		<div class="flex items-start space-x-4">
 			<!-- Company Logo -->
 			<div class="flex-shrink-0">
@@ -33,6 +29,8 @@
 					<JobTagComponent v-for="tag in job.tags" :key="tag.label" :tag="tag" size="sm" />
 				</div>
 			</div>
+
+			<FavoriteHeartComponent v-model="isFavorited" size="sm" variant="simple" @favorited="onFavorited" />
 		</div>
 	</RouterLink>
 </template>
@@ -41,9 +39,8 @@
 import { RouterLink } from 'vue-router'
 import type { Job } from '@/types/job.type'
 import JobTagComponent from '@/components/job-tag.component.vue'
+import FavoriteHeartComponent from '@/components/favorite-heart.component.vue'
 import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
-import { Heart, HeartOff } from 'lucide-vue-next'
 
 defineProps<{
 	job: Job
@@ -59,5 +56,9 @@ const getInitials = (companyName: string): string => {
 }
 
 const isFavorited = ref(false)
-const toggleFavorite = () => { isFavorited.value = !isFavorited.value }
+
+const onFavorited = (favorited: boolean) => {
+	console.log('Job favorited:', favorited)
+	// Here you could emit to parent, call API, etc.
+}
 </script>

@@ -20,29 +20,23 @@ export default class SocialAuthsController {
       // Check for access denied
       if (google.accessDenied()) {
         logger.warn('User denied Google OAuth access')
-        return response.badRequest({
-          error: 'Access denied',
-          message: 'You have cancelled the login process',
-        })
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+        return response.redirect(`${frontendUrl}/auth/callback?error=access_denied`)
       }
 
       // Check for state mismatch (CSRF protection)
       if (google.stateMisMatch()) {
         logger.warn('Google OAuth state mismatch - possible CSRF attack')
-        return response.badRequest({
-          error: 'State mismatch',
-          message: 'We are unable to verify the request. Please try again',
-        })
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+        return response.redirect(`${frontendUrl}/auth/callback?error=state_mismatch`)
       }
 
       // Check for any other errors
       if (google.hasError()) {
         const error = google.getError()
         logger.error('Google OAuth error:', error)
-        return response.badRequest({
-          error: 'OAuth error',
-          message: error,
-        })
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+        return response.redirect(`${frontendUrl}/auth/callback?error=oauth_error`)
       }
 
       // Get user information from Google
@@ -51,10 +45,8 @@ export default class SocialAuthsController {
       // Validate email verification
       if (googleUser.emailVerificationState !== 'verified') {
         logger.warn(`Unverified email attempted login: ${googleUser.email}`)
-        return response.badRequest({
-          error: 'Email not verified',
-          message: 'Please verify your email with Google before logging in',
-        })
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+        return response.redirect(`${frontendUrl}/auth/callback?error=email_not_verified`)
       }
 
       // Create or find user
@@ -67,28 +59,32 @@ export default class SocialAuthsController {
 
       logger.info(`User ${user.email} logged in via Google OAuth`)
 
-      // Return success response with user data and token
-      return response.ok({
-        message: 'Login successful',
-        user: {
+      // Redirect to frontend with success data
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+      const userData = encodeURIComponent(
+        JSON.stringify({
           id: user.id,
           email: user.email,
           fullName: user.fullName,
           avatarUrl: user.avatarUrl,
           emailVerified: user.emailVerified,
-        },
-        token: {
+        })
+      )
+      const tokenData = encodeURIComponent(
+        JSON.stringify({
           type: 'Bearer',
           value: token.value!.release(),
           expiresAt: token.expiresAt,
-        },
-      })
+        })
+      )
+
+      return response.redirect(
+        `${frontendUrl}/auth/callback?success=true&user=${userData}&token=${tokenData}`
+      )
     } catch (error) {
       logger.error('Google OAuth callback error:', error)
-      return response.internalServerError({
-        error: 'Authentication failed',
-        message: 'An error occurred during authentication. Please try again.',
-      })
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+      return response.redirect(`${frontendUrl}/auth/callback?error=auth_failed`)
     }
   }
 
