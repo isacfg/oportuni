@@ -1,7 +1,7 @@
 # railway.toml (repo-root/railway.toml)
 [build]
 rootDirectory = "backend"
-buildCommand = "npm ci && npm run build"
+buildCommand = "node ace build"
 
 [deploy]
 rootDirectory = "backend"
