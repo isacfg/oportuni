@@ -1,26 +1,63 @@
 export interface Job {
-  id: string
+  id: number
   title: string
-  company: string
+  description: string
+  companyId: number
+  contractType: string
   location: string
-  type: 'CLT' | 'PJ' | 'Estágio' | 'Bolsa' | 'Monitoria'
+  remote: boolean
+  applicationUrl: string
+  simplifiedApplication: boolean
+  reducedHours: boolean
+  externalUrl: string | null
+  createdAt: string
+  updatedAt: string
+  isSaved: boolean
+  company: Company
   tags: JobTag[]
-  description?: string
-  requirements?: string[]
-  benefits?: string[]
-  salary?: string
-  publishedAt?: Date
+}
+
+export interface Company {
+  id: number
+  name: string
+  description: string
+  logoUrl: string | null
+  facebookUrl: string | null
+  linkedinUrl: string | null
+  twitterUrl: string | null
+  instagramUrl: string | null
+  websiteUrl: string | null
+  createdAt: string
+  updatedAt: string
 }
 
 export interface JobTag {
-  label: string
-  emoji: string
+  id: number
+  name: string
+  type: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface JobsResponse {
+  meta: {
+    total: number
+    perPage: number
+    currentPage: number
+    lastPage: number
+    firstPage: number
+    firstPageUrl: string
+    lastPageUrl: string
+    nextPageUrl: string | null
+    previousPageUrl: string | null
+  }
+  data: Job[]
 }
 
 export interface SearchFilters {
   query?: string
   area?: string
-  type?: Job['type']
+  type?: string
   location?: string
   tags?: string[]
 }

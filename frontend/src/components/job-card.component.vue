@@ -6,7 +6,7 @@
 			<!-- Company Logo -->
 			<div class="flex-shrink-0">
 				<div class="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center">
-					<span class="text-lg font-semibold text-gray-600">{{ getInitials(job.company) }}</span>
+					<span class="text-lg font-semibold text-gray-600">{{ getInitials(job.company.name) }}</span>
 				</div>
 			</div>
 
@@ -17,16 +17,17 @@
 				</h3>
 
 				<div class="flex items-center space-x-4 text-sm text-gray-600 mb-3">
-					<span>{{ job.company }}</span>
+					<span>{{ job.company.name }}</span>
 					<span>•</span>
 					<span>{{ job.location }}</span>
 					<span>•</span>
-					<span>{{ job.type }}</span>
+					<span>{{ job.contractType }}</span>
+					<span v-if="job.remote" class="text-green-600">• Remoto</span>
 				</div>
 
 				<!-- Tags with Emojis -->
 				<div class="flex flex-wrap gap-2">
-					<JobTagComponent v-for="tag in job.tags" :key="tag.label" :tag="tag" size="sm" />
+					<JobTagComponent v-for="tag in job.tags" :key="tag.id" :tag="tag" size="sm" />
 				</div>
 			</div>
 

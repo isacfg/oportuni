@@ -1,0 +1,16 @@
+# railway.toml  (repo-root)
+[build]
+rootDirectory = "backend"
+buildCommand = "npm ci && npm run build"
+
+[deploy]
+rootDirectory = "backend"
+# migra + popula o banco
+preDeployCommand = [
+  "node build/ace migration:run --force",
+  "node build/ace db:seed"
+]
+startCommand = "node build/bin/server.js"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
