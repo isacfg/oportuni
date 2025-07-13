@@ -93,6 +93,14 @@
   - [x] **Múltiplos pesos da fonte (100-900)**
   - [x] **Título da página atualizado para Oportuni**
   - [x] **Preconnect para otimização de carregamento**
+- [x] **Configuração de Ambiente para Produção**
+  - [x] **Variáveis de ambiente configuradas (.env, .env.development, .env.production)**
+  - [x] **Backend URL configurado para produção: `https://oportuni-backend.onrender.com`**
+  - [x] **Configuração do Vite para diferentes ambientes**
+  - [x] **Tipos TypeScript para variáveis de ambiente**
+  - [x] **Atualização dos serviços (JobService, TagService) para usar variáveis de ambiente**
+  - [x] **Build de produção testado e funcionando**
+  - [x] **Confirmação de que URLs de produção estão no build final**
 
 ### 🔄 Em Andamento  
 - [ ] Testes das novas funcionalidades no navegador

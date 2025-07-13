@@ -1,0 +1,90 @@
+# Project Structure
+
+```
+└── components.json
+└── .cursor/
+    └── rules/
+└── .cursorrules
+        └── structure.mdc
+└── e2e/
+    └── tsconfig.json
+    └── vue.spec.ts
+└── .editorconfig
+└── .env
+└── .env.development
+└── env.d.ts
+└── .env.production
+└── eslint.config.ts
+└── .gitattributes
+└── .gitignore
+└── index.html
+└── memory-bank/
+    └── architecture.md
+    └── progress.md
+└── opencode.json
+└── package.json
+└── playwright.config.ts
+└── pnpm-lock.yaml
+└── .prettierrc.json
+└── public/
+    └── favicon.ico
+└── README.md
+└── src/
+    └── App.vue
+    └── assets/
+        └── 2.png
+        └── background.png
+        └── Group 46888.png
+        └── logo.png
+        └── main.css
+    └── components/
+        └── app-header.component.vue
+        └── custom-search.component.vue
+        └── favorite-heart.component.vue
+        └── hero-section.component.vue
+        └── job-card.component.vue
+        └── job-tag.component.vue
+        └── recommendations-section.component.vue
+        └── search-bar.component.vue
+        └── tag-filter.component.vue
+        └── ui/
+            └── button/
+                └── Button.vue
+                └── index.ts
+    └── docs/
+        └── tags-system.md
+    └── examples/
+        └── tag-usage.example.ts
+    └── lib/
+        └── utils.ts
+    └── main.ts
+    └── router/
+        └── index.ts
+    └── services/
+        └── job.service.ts
+        └── tag.service.ts
+    └── stores/
+        └── auth.store.ts
+        └── counter.ts
+        └── job.store.ts
+        └── tag.store.ts
+    └── types/
+        └── job.type.ts
+    └── views/
+        └── auth-callback.page.vue
+        └── home.page.vue
+        └── job-detail.page.vue
+└── structure.md
+└── tsconfig.app.json
+└── tsconfig.json
+└── tsconfig.node.json
+└── update_structure.sh
+└── .vite/
+└── vite.config.ts
+    └── deps/
+        └── _metadata.json
+        └── package.json
+└── .vscode/
+    └── extensions.json
+    └── settings.json
+```
