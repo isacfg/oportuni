@@ -1,18 +1,22 @@
 <template>
-  <div class="min-h-screen">
-    <!-- Header -->
-    <AppHeaderComponent />
+	<div class="min-h-screen">
+		<!-- Header -->
+		<AppHeaderComponent />
 
-    <!-- Hero Section -->
-    <HeroSectionComponent />
+		<!-- Hero Section -->
+		<HeroSectionComponent />
 
-    <!-- Recommendations Section -->
-    <RecommendationsSectionComponent />
-  </div>
+		<!-- Custom Search Section -->
+		<CustomSearchSectionComponent />
+
+		<!-- Recommendations Section -->
+		<RecommendationsSectionComponent />
+	</div>
 </template>
 
 <script setup lang="ts">
 import AppHeaderComponent from '@/components/app-header.component.vue'
 import HeroSectionComponent from '@/components/hero-section.component.vue'
 import RecommendationsSectionComponent from '@/components/recommendations-section.component.vue'
+import CustomSearchSectionComponent from '@/components/custom-search.component.vue'
 </script>

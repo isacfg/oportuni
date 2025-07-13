@@ -19,10 +19,12 @@ export interface JobTag {
 
 export interface SearchFilters {
   query?: string
-  area?: string
+  areas?: string[]
   type?: Job['type']
   location?: string
-  tags?: string[]
+  tags?: JobTag[]
+  companyOptions?: string[]
+  otherOptions?: string[]
 }
 
 // Predefined tags with emojis
