@@ -45,6 +45,7 @@ export default class JobPost extends BaseModel {
 
   @manyToMany(() => Tag, {
     pivotTable: 'job_post_tags',
+    pivotTimestamps: true,
   })
   declare tags: ManyToMany<typeof Tag>
 

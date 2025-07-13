@@ -1,10 +1,6 @@
 <template>
 	<section class="w-full pt-8 pb-16 bg-white">
 		<div class="container mx-auto px-4">
-			<!-- <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
-        Recomendações Personalizadas com IA
-      </h2> -->
-
 			<div class="space-y-16">
 				<div v-for="(section, idx) in sectionTitles.length" :key="section">
 					<h3 class="text-2xl font-semibold text-gray-800 mb-8 text-center">{{ sectionTitles[idx] }}</h3>
