@@ -1,5 +1,5 @@
 <template>
-	<section class="w-full pt-8 pb-16 bg-white">
+	<section id="search-results" class="w-full pt-8 pb-16 bg-white">
 		<div class="container mx-auto px-4">
 			<h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
 				Busque por vagas
@@ -14,7 +14,8 @@
 							<div class="pl-6 pr-4 flex items-center pointer-events-none">
 								<Search class="h-5 w-5 text-gray-400" />
 							</div>
-							<input v-model="searchQuery" type="text" placeholder="O que você está procurando?"
+							<input v-model="searchStore.searchQuery" type="text"
+								placeholder="O que você está procurando?"
 								class="flex-1 py-4 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-base"
 								@keyup.enter="handleSearch" />
 						</div>
@@ -38,8 +39,10 @@
 							<div v-if="showAreaFilter"
 								class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
 								<div class="space-y-2">
-									<label v-for="area in areas" :key="area" class="flex items-center gap-2">
-										<input type="checkbox" v-model="selectedAreas" :value="area" class="rounded" />
+									<label v-for="area in searchStore.areas" :key="area"
+										class="flex items-center gap-2">
+										<input type="checkbox" v-model="searchStore.selectedAreas" :value="area"
+											class="rounded" />
 										<span class="text-sm">{{ area }}</span>
 									</label>
 								</div>
@@ -55,10 +58,10 @@
 							<div v-if="showContractTypeFilter"
 								class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
 								<div class="space-y-2">
-									<label v-for="contractType in contractTypes" :key="contractType"
+									<label v-for="contractType in searchStore.contractTypes" :key="contractType"
 										class="flex items-center gap-2">
-										<input type="checkbox" v-model="selectedContractTypes" :value="contractType"
-											class="rounded" />
+										<input type="checkbox" v-model="searchStore.selectedContractTypes"
+											:value="contractType" class="rounded" />
 										<span class="text-sm">{{ contractType }}</span>
 									</label>
 								</div>
@@ -74,14 +77,14 @@
 							<div v-if="showLocationFilter"
 								class="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
 								<div class="space-y-2">
-									<label v-for="location in locations" :key="location"
+									<label v-for="location in searchStore.locations" :key="location"
 										class="flex items-center gap-2">
-										<input type="checkbox" v-model="selectedLocations" :value="location"
+										<input type="checkbox" v-model="searchStore.selectedLocations" :value="location"
 											class="rounded" />
 										<span class="text-sm">{{ location }}</span>
 									</label>
 									<label class="flex items-center gap-2">
-										<input type="checkbox" v-model="remoteOnly" class="rounded" />
+										<input type="checkbox" v-model="searchStore.remoteOnly" class="rounded" />
 										<span class="text-sm">Apenas vagas remotas</span>
 									</label>
 								</div>
@@ -107,7 +110,8 @@
 									</div>
 									<label v-else v-for="tag in filteredTags" :key="tag"
 										class="flex items-center gap-2">
-										<input type="checkbox" v-model="selectedTags" :value="tag" class="rounded" />
+										<input type="checkbox" v-model="searchStore.selectedTags" :value="tag"
+											class="rounded" />
 										<span class="text-sm">{{ tag }}</span>
 									</label>
 								</div>
@@ -199,19 +203,17 @@ import { Search, ChevronDown, Globe, Star, Award, FileText, MapPin, Users, Clock
 import JobCardComponent from './job-card.component.vue'
 import { useJobStore } from '@/stores/job.store'
 import { useTagStore } from '@/stores/tag.store'
+import { useSearchStore } from '@/stores/search.store'
 import type { JobTag } from '../types/job.type'
 
 const jobStore = useJobStore()
 const tagStore = useTagStore()
+const searchStore = useSearchStore()
 
 const sectionTitles = [
 	'Oportunidades em destaque',
 	'Novas oportunidades',
 ]
-
-// Search and filter state
-const searchQuery = ref('')
-const selectedTags = ref<string[]>([])
 
 // Filter dropdown states
 const showAreaFilter = ref(false)
@@ -222,9 +224,6 @@ const showContractTypeFilter = ref(false)
 const showLocationFilter = ref(false)
 
 // Filter values
-const selectedAreas = ref<string[]>([])
-const selectedContractTypes = ref<string[]>([])
-const selectedLocations = ref<string[]>([])
 const tagSearch = ref('')
 const hideCompanies = ref(false)
 const selectedOthers = ref<string[]>([])
@@ -277,40 +276,26 @@ const filteredTags = computed(() => {
 	)
 })
 
-const recommendations = computed(() => jobStore.jobs)
+const recommendations = computed(() => searchStore.searchResults)
 
 // Methods
 const handleSearch = async () => {
-	console.log('Searching for:', searchQuery.value)
-	console.log('Selected tags:', selectedTags.value)
-	console.log('Remote only:', remoteOnly.value)
-
-	const filters = {
-		query: searchQuery.value || undefined,
-		contractType: selectedContractTypes.value.length > 0 ? selectedContractTypes.value[0] : undefined,
-		location: selectedLocations.value.length > 0 ? selectedLocations.value[0] : undefined,
-		remote: remoteOnly.value || undefined,
-		tags: selectedTags.value.length > 0 ? selectedTags.value : undefined,
-		page: 1,
-		limit: 20
-	}
-
-	await jobStore.searchJobs(filters)
+	searchStore.performSearch()
 }
 
 const loadPage = async (page: number) => {
 	if (page < 1 || (jobStore.meta && page > jobStore.meta.lastPage)) return
 
 	// If we have active filters, use search, otherwise use regular fetch
-	if (searchQuery.value || selectedTags.value.length > 0 || selectedContractTypes.value.length > 0 || selectedLocations.value.length > 0 || remoteOnly.value) {
+	if (searchStore.searchQuery || searchStore.selectedTags.length > 0 || searchStore.selectedContractTypes.length > 0 || searchStore.selectedLocations.length > 0 || searchStore.remoteOnly) {
 		const filters = {
-			query: searchQuery.value || undefined,
-			contractType: selectedContractTypes.value.length > 0 ? selectedContractTypes.value[0] : undefined,
-			location: selectedLocations.value.length > 0 ? selectedLocations.value[0] : undefined,
-			remote: remoteOnly.value || undefined,
-			tags: selectedTags.value.length > 0 ? selectedTags.value : undefined,
+			query: searchStore.searchQuery || undefined,
+			contractType: searchStore.selectedContractTypes.length > 0 ? searchStore.selectedContractTypes[0] : undefined,
+			location: searchStore.selectedLocations.length > 0 ? searchStore.selectedLocations[0] : undefined,
+			remote: searchStore.remoteOnly || undefined,
+			tags: searchStore.selectedTags.length > 0 ? searchStore.selectedTags.map(tag => tag.name) : undefined,
 			page,
-			limit: 20
+			limit: 40
 		}
 		await jobStore.searchJobs(filters)
 	} else {
@@ -380,32 +365,23 @@ const toggleQuickTag = (tag: any) => {
 }
 
 const clearFilters = async () => {
-	searchQuery.value = ''
-	selectedAreas.value = []
-	selectedTags.value = []
-	selectedContractTypes.value = []
-	selectedLocations.value = []
+	searchStore.clearSearch()
 	selectedOthers.value = []
 	hideCompanies.value = false
-	remoteOnly.value = false
 	tagSearch.value = ''
 	quickTags.value.forEach(tag => tag.selected = false)
-	tagStore.clearError()
-
-	// Reload jobs without filters
-	await jobStore.fetchJobs()
 }
 
 const applyFilters = () => {
 	const selectedQuickTags = quickTags.value.filter(tag => tag.selected).map(tag => tag.name)
 
 	console.log('Applying filters:', {
-		searchQuery: searchQuery.value,
-		areas: selectedAreas.value,
-		tags: selectedTags.value,
-		contractTypes: selectedContractTypes.value,
-		locations: selectedLocations.value,
-		remoteOnly: remoteOnly.value,
+		searchQuery: searchStore.searchQuery,
+		areas: searchStore.selectedAreas,
+		tags: searchStore.selectedTags,
+		contractTypes: searchStore.selectedContractTypes,
+		locations: searchStore.selectedLocations,
+		remoteOnly: searchStore.remoteOnly,
 		quickTags: selectedQuickTags,
 		others: selectedOthers.value,
 		hideCompanies: hideCompanies.value,

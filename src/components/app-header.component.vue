@@ -34,6 +34,12 @@
 
 					<!-- Authenticated user -->
 					<div v-else-if="authStore.isAuthenticated" class="flex items-center space-x-4">
+						<!-- Create Job button -->
+						<RouterLink to="/cadastrar-vaga"
+							class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-sm hover:shadow-md">
+							Cadastrar Vaga
+						</RouterLink>
+
 						<!-- User info -->
 						<div class="flex items-center space-x-3">
 							<img v-if="authStore.user?.avatarUrl" :src="authStore.user.avatarUrl"

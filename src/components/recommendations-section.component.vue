@@ -15,14 +15,14 @@
 
 <script setup lang="ts">
 import JobCardComponent from './job-card.component.vue'
-import { useJobStore } from '@/stores/job.store'
+import { useSearchStore } from '@/stores/search.store'
 
-const jobStore = useJobStore()
+const searchStore = useSearchStore()
 
 const sectionTitles = [
 	'Oportunidades em destaque',
 	'Novas oportunidades',
 ]
 
-const recommendations = jobStore.jobs
+const recommendations = searchStore.searchResults
 </script>

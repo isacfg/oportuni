@@ -109,10 +109,13 @@
 ### 📋 Próximos Passos
 - [ ] Implementação da funcionalidade de busca integrada
 - [ ] Sistema de recomendações com IA
-- [ ] Sistema de autenticação
 - [ ] Menu mobile para header
 - [ ] Estados de loading e error
 - [ ] Persistência de filtros selecionados
+- [ ] Sistema de gerenciamento de vagas (editar, excluir)
+- [ ] Painel de controle para empresas
+- [ ] Sistema de notificações
+- [ ] Melhoria na experiência de cadastro (tags, categorias)
 
 ### 📝 Notas
 - Projeto baseado em protótipo de baixa fidelidade
@@ -126,6 +129,28 @@
 - **Novo**: Animações suaves e elegantes (rotação lenta de 20s + bounce/pulse)
 - **Novo**: Movimento radial aleatório nos círculos (aproximação e afastamento do centro)
 - Mock data sendo usado para as recomendações
+- [x] Implementado serviço saved-job.service.ts para salvar/remover vagas favoritas via API
+- [x] Integrado job-card.component.vue com o serviço e autenticação, redirecionando para login se necessário
+- [x] Criado search.store.ts para gerenciar estado de busca e filtros
+- [x] Implementada funcionalidade de busca completa no frontend
+- [x] Integradas ambas as search bars (hero e custom-search) com o store de busca
+- [x] Conectados os resultados de busca ao recommendations-section
+- [x] Implementados filtros por área, tipo de contrato, localização, tags e remoto
+- [x] Implementado dropdown de sugestões na search bar do hero
+- [x] Sugestões dinâmicas baseadas em títulos de vagas, empresas e tags
+- [x] Navegação por teclado (setas, Enter, Escape) no dropdown
+- [x] Sugestões populares quando não há query de busca
+- [x] **Sistema de Cadastro de Vagas para Usuários Autenticados**
+  - [x] Página de cadastro de vagas (`create-job.page.vue`)
+  - [x] Formulário completo com validação Zod + vee-validate
+  - [x] Campos: título, descrição, tipo de contrato, localização, remoto, URLs, opções
+  - [x] Componentes shadcn-vue (Input, Textarea, Select, Switch, Button)
+  - [x] Proteção de rota (redirecionamento se não autenticado)
+  - [x] Serviço para criação de vagas (`JobService.createJob`)
+  - [x] Integração com API backend via POST `/job-posts`
+  - [x] Rota `/cadastrar-vaga` configurada no router
+  - [x] Estados de loading e tratamento de erros
+  - [x] Layout responsivo com design moderno
 
 ### 🎨 Tags Disponíveis
 **Modalidades de Trabalho:**

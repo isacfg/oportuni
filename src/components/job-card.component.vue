@@ -31,7 +31,8 @@
 				</div>
 			</div>
 
-			<FavoriteHeartComponent v-model="isFavorited" size="sm" variant="simple" @favorited="onFavorited" />
+			<FavoriteHeartComponent v-model="isFavorited" size="sm" variant="simple" @favorited="onFavorited"
+				:disabled="!auth.isAuthenticated" />
 		</div>
 	</RouterLink>
 </template>
@@ -41,11 +42,11 @@ import { RouterLink } from 'vue-router'
 import type { Job } from '@/types/job.type'
 import JobTagComponent from '@/components/job-tag.component.vue'
 import FavoriteHeartComponent from '@/components/favorite-heart.component.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth.store'
+import { saveJob, removeSavedJob, getSavedJobs } from '@/services/saved-job.service'
 
-defineProps<{
-	job: Job
-}>()
+const props = defineProps<{ job: Job }>()
 
 const getInitials = (companyName: string): string => {
 	return companyName
@@ -56,10 +57,39 @@ const getInitials = (companyName: string): string => {
 		.slice(0, 2)
 }
 
+const auth = useAuthStore()
+
 const isFavorited = ref(false)
 
-const onFavorited = (favorited: boolean) => {
-	console.log('Job favorited:', favorited)
-	// Here you could emit to parent, call API, etc.
+interface SavedJob {
+	id: number
+	userId: number
+	jobPostId: number
+}
+
+onMounted(async () => {
+	if (!auth.isAuthenticated) return
+	try {
+		const result = await getSavedJobs()
+		const saved = (result.data as SavedJob[] | undefined)?.some((item) => item.jobPostId === props.job.id)
+		if (saved) isFavorited.value = true
+	} catch {
+		// Silencioso, não impede renderização
+	}
+})
+
+const onFavorited = async (favorited: boolean) => {
+	if (!auth.isAuthenticated) return
+	try {
+		if (favorited) {
+			await saveJob(props.job.id)
+			isFavorited.value = true
+		} else {
+			await removeSavedJob(props.job.id)
+			isFavorited.value = false
+		}
+	} catch (e) {
+		console.error(e)
+	}
 }
 </script>

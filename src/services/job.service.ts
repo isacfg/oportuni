@@ -6,8 +6,12 @@ export class JobService {
   /**
    * Get all jobs (paginated)
    */
-  static async getJobs(page = 1, limit = 20): Promise<JobsResponse> {
-    const response = await fetch(`${BASE_URL}/job-posts?page=${page}&limit=${limit}`)
+  static async getJobs(page = 1, limit = 40, bearerToken?: string | null): Promise<JobsResponse> {
+    const response = await fetch(`${BASE_URL}/job-posts?page=${page}&limit=${limit}`, bearerToken ? {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    } : {})
     if (!response.ok) {
       throw new Error(`Failed to fetch jobs: ${response.statusText}`)
     }
@@ -54,6 +58,38 @@ export class JobService {
     if (!response.ok) {
       throw new Error(`Failed to search jobs: ${response.statusText}`)
     }
+    return response.json()
+  }
+
+  /**
+   * Create a new job posting
+   */
+  static async createJob(jobData: {
+    title: string
+    description: string
+    company_id: number
+    contract_type: string
+    location: string
+    remote: boolean
+    application_url: string
+    simplified_application: boolean
+    reduced_hours: boolean
+    external_url: string | null
+  }, bearerToken: string): Promise<Job> {
+    const response = await fetch(`${BASE_URL}/job-posts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${bearerToken}`
+      },
+      body: JSON.stringify(jobData)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.message || `Failed to create job: ${response.statusText}`)
+    }
+
     return response.json()
   }
 }

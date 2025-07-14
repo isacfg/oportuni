@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Job, JobsResponse } from '@/types/job.type'
 import { JobService } from '@/services/job.service'
+import { useAuthStore } from '@/stores/auth.store'
 
 export const useJobStore = defineStore('job', () => {
   const jobs = ref<Job[]>([])
@@ -10,11 +11,13 @@ export const useJobStore = defineStore('job', () => {
   const meta = ref<JobsResponse['meta'] | null>(null)
   const currentPage = ref(1)
 
-  const fetchJobs = async (page = 1, limit = 20) => {
+  const auth = useAuthStore()
+
+  const fetchJobs = async (page = 1, limit = 40) => {
     loading.value = true
     error.value = null
     try {
-      const response = await JobService.getJobs(page, limit)
+      const response = await JobService.getJobs(page, limit, auth.token ? auth.token : null)
       jobs.value = response.data
       meta.value = response.meta
       currentPage.value = page

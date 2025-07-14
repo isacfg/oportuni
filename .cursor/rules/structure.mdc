@@ -25,6 +25,7 @@
 └── package.json
 └── playwright.config.ts
 └── pnpm-lock.yaml
+└── postman_collection.json
 └── .prettierrc.json
 └── public/
     └── favicon.ico
@@ -62,22 +63,26 @@
         └── index.ts
     └── services/
         └── job.service.ts
+        └── saved-job.service.ts
         └── tag.service.ts
     └── stores/
         └── auth.store.ts
         └── counter.ts
         └── job.store.ts
+        └── search.store.ts
         └── tag.store.ts
     └── types/
         └── job.type.ts
     └── views/
         └── auth-callback.page.vue
+        └── create-job.page.vue
         └── home.page.vue
         └── job-detail.page.vue
 └── structure.md
 └── tsconfig.app.json
 └── tsconfig.json
 └── tsconfig.node.json
+└── uninstall-opencode.sh
 └── update_structure.sh
 └── .vite/
 └── vite.config.ts
